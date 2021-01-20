@@ -1,11 +1,11 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const  cors = require('cors')
+import express from 'express'
+import { json } from 'body-parser'
+import cors from 'cors'
 
 const PORT = 3000
-const api = require('./routes/api')
+import api from './routes/api'
 const app = express()
-app.use(bodyParser.json())
+app.use(json())
 app.use(cors())
 
 app.use('/api',api)

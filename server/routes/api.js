@@ -27,15 +27,27 @@ router.post('/register', (req, res) => {
   let userData = req.body
   console.log(req.body);
   let user = new User(userData)
-  user.save((error, registeredUser) => {
-    if (error) {
-      console.log(error);
+  User.findOne({ email: userData.email }, (err, user) => {
+    if (err) {
+      console.log(err);
     } else {
-      let payload = { subject: registeredUser._id }
-      let token = jwt.sign(payload, 'secretKey')
-      res.status(200).send({ token })
+      if (user) {
+        console.log('Email already exist');
+        res.status(401).send('Email already exist')
+      } else {
+        user.save((error, registeredUser) => {
+          if (error) {
+            console.log(error);
+          } else {
+            let payload = { subject: registeredUser._id }
+            let token = jwt.sign(payload, 'secretKey')
+            res.status(200).send({ token })
+          }
+        })
+      }
     }
   })
+
 })
 
 router.post('/login', (req, res) => {

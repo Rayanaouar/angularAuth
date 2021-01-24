@@ -74,12 +74,8 @@ router.get('/popular',(req, res) => {
     if (err) {
       console.log(err);
     } else {
-      movies.forEach((movie) =>{
-      movieMap[movie._id] = movie;
-    });
-    console.log(movieMap);
-    res.send(movieMap); 
-  } 
+      res.status(200).send(movies);  
+    }
   });
 
 })
@@ -90,11 +86,7 @@ router.get('/toprated',(req, res) => {
     if (err) {
       console.log(err);
     } else {
-      movies.forEach((movie) =>{
-      movieMap[movie._id] = movie;
-    });
-    console.log(movieMap);
-    res.send(movieMap);  
+      res.status(200).send(movies);  
   }
   });
 
@@ -105,11 +97,7 @@ router.get('/upcoming',(req, res) => {
     if (err) {
       console.log(err);
     } else {
-      movies.forEach((movie) =>{
-      movieMap[movie._id] = movie;
-    });
-    console.log(movieMap);
-    res.send(movieMap);  
+      res.status(200).send(movies);  
   }
   });
 

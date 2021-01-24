@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
-const api = require('./routes/authApi')
-const movie = require('./routes/movieApi')
+const authApi = require('./routes/authApi')
+const movieApi = require('./routes/movieApi')
 
 const bodyParser = require('body-parser')
 
@@ -11,10 +11,10 @@ const app = express()
 
 app.use(bodyParser.json())
 app.use(cors())
-app.use('/auth', api)
-app.use('/movie',movie)
+app.use('/auth', authApi)
+app.use('/movie',movieApi)
 
-app.get('/movieclub', function (req, res) {
+app.get('/', function (req, res) {
   res.send('hello from server')
 })
 

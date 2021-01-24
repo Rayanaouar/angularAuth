@@ -19,12 +19,114 @@ mongoose.connect(db, connectionParams)
   })
 
 router.get('/', (req, res) => {
-  res.send('From API route')
+  res.send('From API route movie')
 })
 
-router.get('/popular',(req, res) => {
-  Movie.find({},)
+router.delete('/remove/:id',(req,res)=>{
+  req.params.id = "600d5eb87d0e234b7b956903"
+  Movie.deleteOne({_id: req.params.id}).then(
+    () => {
+      res.status(200).json({
+        message: 'Deleted!'
+      });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+})
+})
 
+router.put('/update/:id', (req, res, next) => {
+  let movieToUpdate = new Movie(req.body)
+  Movie.updateOne({_id: req.params.id}, movieToUpdate).then(
+    () => {
+      res.status(200).json({
+        message: 'Thing updated successfully!'
+      });
+    }
+  ).catch(
+    (error) => {
+      res.status(400).json({
+        error: error
+      });
+    }
+  );
+});
+
+router.post('/add',(req,res)=>{
+  let movieData = req.body
+  let movieToRegister = new Movie(movieData)
+  movieToRegister.save((error, registeredMovie) => {
+    if (error) {
+      console.log(error);
+    } else {
+      res.status(200).json({ message: "ok" })
+    }
+  })
+})
+
+
+router.get('/popular',(req, res) => {
+  var movieMap = {};
+  Movie.find({type: "popular"}, (err, movies) => {
+    if (err) {
+      console.log(err);
+    } else {
+      movies.forEach((movie) =>{
+      movieMap[movie._id] = movie;
+    });
+    console.log(movieMap);
+    res.send(movieMap); 
+  } 
+  });
+
+})
+
+router.get('/toprated',(req, res) => {
+  var movieMap = {};
+  Movie.find({type: "toprated"}, (err, movies) => {
+    if (err) {
+      console.log(err);
+    } else {
+      movies.forEach((movie) =>{
+      movieMap[movie._id] = movie;
+    });
+    console.log(movieMap);
+    res.send(movieMap);  
+  }
+  });
+
+})
+router.get('/upcoming',(req, res) => {
+  var movieMap = {};
+  Movie.find({type: "upcoming"}, (err, movies) => {
+    if (err) {
+      console.log(err);
+    } else {
+      movies.forEach((movie) =>{
+      movieMap[movie._id] = movie;
+    });
+    console.log(movieMap);
+    res.send(movieMap);  
+  }
+  });
+
+})
+router.get('/details/:id', (req, res) => {
+  Movie.findOne({ _id: req.params.id }, (err, movie) => {
+    if (err) {
+      console.log(err);
+    } else {
+      if (!movie) {
+        res.status(401).send('movie not found')
+      } else {
+          res.status(200).send(movie)
+        }
+      }
+    }
+  )
 })
 
 module.exports = router

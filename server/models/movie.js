@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 
 const Schema = mongoose.Schema
-const userSchema = new Schema({
+const movieSchema = new Schema({
   type:String,
   backdrop_path: String,
   genre: String,
@@ -13,4 +13,5 @@ const userSchema = new Schema({
   running_time: String,
   country: String,
 })
-module.exports = mongoose.model('movie', userSchema,'movies')
+
+module.exports = mongoose.model('movie', movieSchema,'movies')

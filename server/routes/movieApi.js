@@ -22,9 +22,8 @@ router.get('/', (req, res) => {
   res.send('From API route movie')
 })
 
-router.delete('/remove/:id',(req,res)=>{
-  req.params.id = "600d5eb87d0e234b7b956903"
-  Movie.deleteOne({_id: req.params.id}).then(
+router.delete('/remove/:id', (req, res) => {
+  Movie.deleteOne({ _id: req.params.id }).then(
     () => {
       res.status(200).json({
         message: 'Deleted!'
@@ -35,12 +34,12 @@ router.delete('/remove/:id',(req,res)=>{
       res.status(400).json({
         error: error
       });
-})
+    })
 })
 
 router.put('/update/:id', (req, res, next) => {
   let movieToUpdate = new Movie(req.body)
-  Movie.updateOne({_id: req.params.id}, movieToUpdate).then(
+  Movie.updateOne({ _id: req.params.id }, movieToUpdate).then(
     () => {
       res.status(200).json({
         message: 'Thing updated successfully!'
@@ -55,9 +54,8 @@ router.put('/update/:id', (req, res, next) => {
   );
 });
 
-router.post('/add',(req,res)=>{
-  let movieData = req.body
-  let movieToRegister = new Movie(movieData)
+router.post('/add', (req, res) => {
+  let movieToRegister = new Movie(req.body)
   movieToRegister.save((error, registeredMovie) => {
     if (error) {
       console.log(error);
@@ -68,37 +66,32 @@ router.post('/add',(req,res)=>{
 })
 
 
-router.get('/popular',(req, res) => {
-  var movieMap = {};
-  Movie.find({type: "popular"}, (err, movies) => {
+router.get('/popular', (req, res) => {
+  Movie.find({ type: "popular" }, (err, movies) => {
     if (err) {
       console.log(err);
     } else {
-      res.status(200).send(movies);  
+      res.status(200).send(movies);
     }
   });
-
 })
 
-router.get('/toprated',(req, res) => {
-  var movieMap = {};
-  Movie.find({type: "toprated"}, (err, movies) => {
+router.get('/toprated', (req, res) => {
+  Movie.find({ type: "toprated" }, (err, movies) => {
     if (err) {
       console.log(err);
     } else {
-      res.status(200).send(movies);  
-  }
+      res.status(200).send(movies);
+    }
   });
-
 })
-router.get('/upcoming',(req, res) => {
-  var movieMap = {};
-  Movie.find({type: "upcoming"}, (err, movies) => {
+router.get('/upcoming', (req, res) => {
+  Movie.find({ type: "upcoming" }, (err, movies) => {
     if (err) {
       console.log(err);
     } else {
-      res.status(200).send(movies);  
-  }
+      res.status(200).send(movies);
+    }
   });
 
 })
@@ -110,10 +103,10 @@ router.get('/details/:id', (req, res) => {
       if (!movie) {
         res.status(401).send('movie not found')
       } else {
-          res.status(200).send(movie)
-        }
+        res.status(200).send(movie)
       }
     }
+  }
   )
 })
 

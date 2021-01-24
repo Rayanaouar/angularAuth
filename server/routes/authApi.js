@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require('mongoose')
 const User = require('../models/user')
+const Movie = require('../models/movie')
 const jwt = require('jsonwebtoken')
 const db = "mongodb+srv://admin:123456789raya@gettingstarted.ezkjr.mongodb.net/movieClub?retryWrites=true&w=majority"
 
@@ -26,16 +27,28 @@ router.get('/', (req, res) => {
 router.post('/register', (req, res) => {
   let userData = req.body
   console.log(req.body);
-  let user = new User(userData)
-  user.save((error, registeredUser) => {
-    if (error) {
-      console.log(error);
+  let userToRegister = new User(userData)
+  User.findOne({ email: userData.email }, (err, user) => {
+    if (err) {
+      console.log(err);
     } else {
-      let payload = { subject: registeredUser._id }
-      let token = jwt.sign(payload, 'secretKey')
-      res.status(200).send({ token })
+      if (user) {
+        console.log('Email already exist');
+        res.status(401).send('Email already exist')
+      } else {
+        userToRegister.save((error, registeredUser) => {
+          if (error) {
+            console.log(error);
+          } else {
+            let payload = { subject: registeredUser._id }
+            let token = jwt.sign(payload, 'secretKey')
+            res.status(200).send({ token })
+          }
+        })
+      }
     }
   })
+
 })
 
 router.post('/login', (req, res) => {
